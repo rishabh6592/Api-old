@@ -1,42 +1,51 @@
-require("dotenv").config({path:"./.env"})
-const express = require("express")
-const app = express()
+// setting dotenv file
+require("dotenv").config({ path: "./.env" });
+const express = require("express");
+const app = express();
 
-const indexRouter = require("./routes/indexRouter")
 
-require("./models/connect").mongooseconnection();
 
-app.listen(process.env.PORT,() => {
-    console.log(`server run on port ${process.env.PORT}`);
 
-    
+
+
+// db connection
+require("./models/connect").mongoconnection();
+
+const indexRouter = require("./routes/indexRouter");
+
+
+
+
+
+// setting logger
+app.use(require("morgan")("tiny"));
+
+
+
+
+
+
+
+
+
+// bodyparaser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+
+// router setup -> must be second last in the file
+app.use("/api/user", indexRouter);
+
+
+
+
+
+
+
+
+// creating server --must be at the last
+app.listen(process.env.PORT, () => {
+    console.log(`Server started on port ${process.env.PORT}`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    app.use(require("morgan")("combined"))
-
-
-
-    // send--text message
-    // json--data json
-    // res--sending the data to frontend
-    // req--getting data from frontend
